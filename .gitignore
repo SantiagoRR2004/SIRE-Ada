@@ -1,11 +1,11 @@
 # Ignore all files
 *
 
-# Include files ending in .adb
-!*.adb
+# Unignore directories so it can scan them
+!*/
 
-# Include the .vscode folder itself
-!.vscode/
+# Include all files ending in .adb
+!*.adb
 
 # Include all files in the .vscode folder
 !.vscode/**
