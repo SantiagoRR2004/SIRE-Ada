@@ -2,6 +2,24 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "Install Ada Extension",
+            "type": "shell",
+            "command": "code --install-extension AdaCore.ada",
+            "group": {
+              "kind": "build",
+              "isDefault": true
+            },
+            "presentation": {
+              "reveal": "silent",
+              "focus": false,
+              "panel": "new"
+            },
+            "runOptions": {
+              "runOn": "folderOpen" // Run this task when the folder is opened
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "ada: Build active file",
             "type": "shell",
             "command": "gnatmake",
