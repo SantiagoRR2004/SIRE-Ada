@@ -1,0 +1,14 @@
+# Ignore all files
+*
+
+# Include files ending in .adb
+!*.adb
+
+# Include the .vscode folder itself
+!.vscode/
+
+# Include all files in the .vscode folder
+!.vscode/**
+
+# Include .gitignore
+!/.gitignore
