@@ -1,41 +1,68 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Install Ada Extension",
-            "type": "shell",
-            "command": "code --install-extension AdaCore.ada",
-            "group": {
-              "kind": "build",
-              "isDefault": true
-            },
-            "presentation": {
-              "reveal": "silent",
-              "focus": false,
-              "panel": "new"
-            },
-            "runOptions": {
-              "runOn": "folderOpen" // Run this task when the folder is opened
-            },
-            "problemMatcher": []
-        },
-        {
-            "label": "ada: Build active file",
-            "type": "shell",
-            "command": "gnatmake",
-            "args": [
-                "${file}",
-                "-o", "${fileBasenameNoExtension}"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "shared"
-            },
-            "problemMatcher": []
-        }
-    ]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Install Ada Extension",
+      "type": "shell",
+      "command": "code --install-extension AdaCore.ada",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "focus": false,
+        "panel": "new"
+      },
+      "runOptions": {
+        "runOn": "folderOpen" // Run this task when the folder is opened
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ada: Build active file",
+      "type": "shell",
+      "command": "gnatmake",
+      "args": ["${file}", "-o", "${fileBasenameNoExtension}"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Install Run on save",
+      "type": "shell",
+      "command": "code --install-extension Gruntfuggly.triggertaskonsave",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "silent",
+        "focus": false,
+        "panel": "new"
+      },
+      "runOptions": {
+        "runOn": "folderOpen" // Run this task when the folder is opened
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Format Current File",
+      "type": "shell",
+      "command": "${command:editor.action.formatDocument}",
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
 }
