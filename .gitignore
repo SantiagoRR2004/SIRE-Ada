@@ -10,6 +10,11 @@
 # Include all files ending in .ads
 !*.ads
 
+# Include all files ending in .png
+!*.png
+
+# Include all files ending in .md
+!*.md
 # Include all files in the .vscode folder
 !.vscode/**
 
