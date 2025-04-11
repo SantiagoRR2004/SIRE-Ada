@@ -7,6 +7,9 @@
 # Include all files ending in .adb
 !*.adb
 
+# Include all files ending in .ads
+!*.ads
+
 # Include all files in the .vscode folder
 !.vscode/**
 
