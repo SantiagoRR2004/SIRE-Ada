@@ -10,10 +10,13 @@ procedure Adivinanza is
    Aleatorio : Int1_100;
    Intentos  : Integer := 0;
    Respuesta : Int1_100;
+   Entrada   : String (1 .. 100);
+   Longitud  : Natural;
+   Valor     : Integer;
 begin
    Ada.Numerics.Float_Random.Reset (Rand);
-
-   Aleatorio := Int1_100 (Ada.Numerics.Float_Random.Random (Rand) * 100.0) + 1;
+   Aleatorio :=
+     Int1_100 (Integer (Ada.Numerics.Float_Random.Random (Rand) * 100.0) + 1);
 
    Put_Line ("El número a adivinar está entre 1 y 100.");
 
@@ -21,15 +24,22 @@ begin
    loop
       Intentos := Intentos + 1;
 
-      Put ("¿Qué número crees que es? ");
       loop
+         Put ("¿Qué número crees que es? ");
+         Get_Line (Entrada, Longitud);
+
          begin
-            Get (Respuesta);
-            exit;
+            Valor := Integer'Value (Entrada (1 .. Longitud));
+            if Valor in Int1_100 then
+               Respuesta := Int1_100 (Valor);
+               exit;
+            else
+               Put_Line
+                 ("Error. Por favor, introduce un número entre 1 y 100.");
+            end if;
          exception
             when others =>
-               Put_Line ("Error. Por favor, introduce un número válido:");
-               Skip_Line;
+               Put_Line ("Error. Por favor, introduce un número válido");
          end;
       end loop;
 
