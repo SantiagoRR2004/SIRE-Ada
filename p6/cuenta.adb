@@ -1,6 +1,6 @@
 package body Cuenta is
    function Crear(
-      Titular : String;
+      Titular : Unbounded_String;
       Saldo  : Float
    ) return Cuenta_bancaria is
       C : Cuenta_bancaria;
@@ -10,7 +10,7 @@ package body Cuenta is
       return C;
    end Crear;
 
-   function Depositar(
+   procedure Depositar(
       Cuenta : in out Cuenta_bancaria;
       Monto  : Float
    ) is
@@ -20,13 +20,15 @@ package body Cuenta is
       end if;
    end Depositar;
 
-   function Retirar(
+   procedure Retirar(
       Cuenta : in out Cuenta_bancaria;
       Monto  : Float
    ) is
    begin
       if Monto > 0.0 and Monto <= Cuenta.Saldo then
          Cuenta.Saldo := Cuenta.Saldo - Monto;
+      else
+         raise Constraint_Error with "Monto inválido para retirar.";
       end if;
    end Retirar;
 
@@ -39,7 +41,7 @@ package body Cuenta is
 
    function Consultar_Titular(
       Cuenta : Cuenta_bancaria
-   ) return String is
+   ) return Unbounded_String is
    begin
       return Cuenta.Titular;
    end Consultar_Titular;

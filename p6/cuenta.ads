@@ -1,14 +1,15 @@
+with Ada.Strings.Unbounded;      use Ada.Strings.Unbounded;
 package Cuenta is
    type Cuenta_bancaria is private;
    function Crear(
-      Titular : String;
+      Titular : Unbounded_String;
       Saldo  : Float
    ) return Cuenta_bancaria;
-   function Depositar(
+   procedure Depositar(
       Cuenta : in out Cuenta_bancaria;
       Monto  : Float
    );
-   function Retirar(
+   procedure Retirar(
       Cuenta : in out Cuenta_bancaria;
       Monto  : Float
    );
@@ -17,11 +18,11 @@ package Cuenta is
    ) return Float;
    function Consultar_Titular(
       Cuenta : Cuenta_bancaria
-   ) return String;
+   ) return Unbounded_String;
 private
    type Cuenta_bancaria is
       record
-         Titular : String(1 .. 20);
+         Titular : Unbounded_String;
          Saldo   : Float;
       end record;
 end Cuenta;
