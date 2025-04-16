@@ -1,13 +1,13 @@
 with Cuenta;
 package body Banco is
-   function Crear return Banco_Array is
+   function Crear_Banco return Banco_Array is
       B : Banco_Array;
    begin
       for I in 1 .. 10 loop
          B (I) := Cuenta.Crear (To_Unbounded_String (""), 0.0);
       end loop;
       return B;
-   end Crear;
+   end Crear_Banco;
 
    procedure Agregar_Cuenta
      (B : in out Banco_Array; C : in Cuenta.Cuenta_bancaria)

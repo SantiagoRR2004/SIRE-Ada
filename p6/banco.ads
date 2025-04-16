@@ -3,7 +3,7 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package Banco is
    type Banco_Array is private;
 
-   function Crear return Banco_Array;
+   function Crear_Banco return Banco_Array;
 
    procedure Agregar_Cuenta
      (B : in out Banco_Array; C : in Cuenta.Cuenta_bancaria);
