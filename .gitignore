@@ -15,8 +15,12 @@
 
 # Include all files ending in .md
 !*.md
+
 # Include all files in the .vscode folder
 !.vscode/**
+
+# Include all files in the .github folder
+!.github/**
 
 # Include .gitignore
 !/.gitignore
