@@ -16,8 +16,10 @@ jobs:
 
       - name: Install GNAT
         run: |
-          sudo apt update
-          sudo apt install -y gnat
+          sudo apt install -y alire
+          alr get libadalang_tools
+          cd libadalang_tools*
+          alr update && alr build
 
       - name: Run gnatpp to format all Ada files
         run: |
