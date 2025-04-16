@@ -14,9 +14,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install Alire
+      - name: Download Alire
         run: |
-          curl -sSf https://alire.ada.dev/install.sh | sh -s -- -y
+          curl -L -o alr.tar.gz https://alire.ada.dev/alire-2.0.0-bin-x86_64-linux.tar.gz
+          mkdir -p $HOME/.alire/bin
+          tar -xzf alr.tar.gz -C $HOME/.alire/bin --strip-components=1
           echo "$HOME/.alire/bin" >> $GITHUB_PATH
 
       - name: Install gnatpp using Alire
