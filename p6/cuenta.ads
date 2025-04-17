@@ -3,20 +3,7 @@ with Ada.Strings.Unbounded;
 package Cuenta is
    use Ada.Strings.Unbounded;
 
-   task type Cuenta_Task is
-      entry Inicializar (Titular : Unbounded_String; SaldoI : Float);
-      entry Depositar (Monto : Float);
-      entry Retirar (Monto : Float);
-      entry Consultar_Saldo (Result : out Float);
-      entry Consultar_Titular (Result : out Unbounded_String);
-      entry Finalizar;
-   end Cuenta_Task;
-
-   type Cuenta_Task_Access is access Cuenta_Task;
-
-   type Cuenta_bancaria is record
-      Tarea : Cuenta_Task_Access;
-   end record;
+   type Cuenta_bancaria is private;
 
    function Crear
      (Titular : Unbounded_String; Saldo : Float) return Cuenta_bancaria;
@@ -31,5 +18,22 @@ package Cuenta is
      (Cuenta : Cuenta_bancaria) return Unbounded_String;
 
    procedure Finalizar (Cuenta : in out Cuenta_bancaria);
+
+private
+
+   task type Cuenta_Task is
+      entry Inicializar (Titular : Unbounded_String; SaldoI : Float);
+      entry Depositar (Monto : Float);
+      entry Retirar (Monto : Float);
+      entry Consultar_Saldo (Result : out Float);
+      entry Consultar_Titular (Result : out Unbounded_String);
+      entry Finalizar;
+   end Cuenta_Task;
+
+   type Cuenta_Task_Access is access Cuenta_Task;
+
+   type Cuenta_bancaria is record
+      Tarea : Cuenta_Task_Access;
+   end record;
 
 end Cuenta;
