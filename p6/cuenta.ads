@@ -9,6 +9,7 @@ package Cuenta is
       entry Retirar (Monto : Float);
       entry Consultar_Saldo (Result : out Float);
       entry Consultar_Titular (Result : out Unbounded_String);
+      entry Finalizar;
    end Cuenta_Task;
 
    type Cuenta_Task_Access is access Cuenta_Task;
@@ -28,5 +29,7 @@ package Cuenta is
 
    function Consultar_Titular
      (Cuenta : Cuenta_bancaria) return Unbounded_String;
+
+   procedure Finalizar (Cuenta : in out Cuenta_bancaria);
 
 end Cuenta;

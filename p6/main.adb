@@ -54,4 +54,7 @@ begin
    Put_Line
      ("Total en el banco después de las transacciones: " &
       Float'Image (Total_Banco));
+
+   -- Finalizar cuentas
+   Banco.Finalizar (B);
 end Main;

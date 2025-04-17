@@ -99,4 +99,12 @@ package body Banco is
       end loop;
    end Retirar;
 
+   procedure Finalizar (B : in out Banco_Array) is
+   begin
+      for I in 1 .. 10 loop
+         Cuenta.Finalizar (B (I));
+      end loop;
+   end Finalizar;
+
+
 end Banco;

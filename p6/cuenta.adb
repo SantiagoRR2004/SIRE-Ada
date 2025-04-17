@@ -6,12 +6,14 @@ package body Cuenta is
    task body Cuenta_Task is
       Nombre : Unbounded_String;
       Saldo  : Float;
+      Finalizar_Proceso : Boolean := False;
    begin
       accept Inicializar (Titular : Unbounded_String; SaldoI : Float) do
          Nombre := Titular;
          Saldo  := SaldoI;
       end Inicializar;
       loop
+         exit when Finalizar_Proceso;
          select
             accept Depositar (Monto : Float) do
                Saldo := Saldo + Monto;
@@ -35,6 +37,14 @@ package body Cuenta is
             accept Consultar_Titular (Result : out Unbounded_String) do
                Result := Nombre;
             end Consultar_Titular;
+
+         or
+            accept Finalizar do
+               Finalizar_Proceso := True;
+            end Finalizar;
+
+         or
+            terminate;
          end select;
       end loop;
    end Cuenta_Task;
@@ -78,5 +88,15 @@ package body Cuenta is
       Cuenta.Tarea.Consultar_Titular (Nombre);
       return Nombre;
    end Consultar_Titular;
+
+   procedure Finalizar (Cuenta : in out Cuenta_bancaria) is
+   begin
+      -- Finalizar la tarea
+      Cuenta.Tarea.Finalizar;
+
+      -- Liberar el acceso a la tarea
+      Cuenta.Tarea := null;
+
+   end Finalizar;
 
 end Cuenta;
