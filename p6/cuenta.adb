@@ -4,15 +4,16 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 package body Cuenta is
 
    task body Cuenta_Task is
-      Nombre : Unbounded_String;
-      Saldo  : Float;
+      Nombre            : Unbounded_String;
+      Saldo             : Float;
       Finalizar_Proceso : Boolean := False;
    begin
       accept Inicializar (Titular : Unbounded_String; SaldoI : Float) do
          Nombre := Titular;
-         Saldo  := SaldoI;
+         Saldo := SaldoI;
       end Inicializar;
       loop
+         -- Put_Line ("Cuenta de: " & To_String (Nombre));
          exit when Finalizar_Proceso;
          select
             accept Depositar (Monto : Float) do
@@ -62,6 +63,20 @@ package body Cuenta is
 
       return (Tarea => Nueva_Cuenta);
    end Crear;
+
+   procedure Crear_Task_null (Cuenta : in out Cuenta_bancaria) is
+   begin
+      Cuenta.Tarea := null;
+   end Crear_Task_null;
+
+   function Check_null (Cuenta : in Cuenta_bancaria) return Boolean is
+   begin
+      if Cuenta.Tarea /= null then
+         return False;
+      else
+         return True;
+      end if;
+   end Check_null;
 
    procedure Depositar (Cuenta : in out Cuenta_bancaria; Monto : Float) is
    begin

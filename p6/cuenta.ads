@@ -8,6 +8,10 @@ package Cuenta is
    function Crear
      (Titular : Unbounded_String; Saldo : Float) return Cuenta_bancaria;
 
+   procedure Crear_Task_null (Cuenta : in out Cuenta_bancaria);
+
+   function Check_null (Cuenta : in Cuenta_bancaria) return Boolean;
+
    procedure Depositar (Cuenta : in out Cuenta_bancaria; Monto : Float);
 
    procedure Retirar (Cuenta : in out Cuenta_bancaria; Monto : Float);
