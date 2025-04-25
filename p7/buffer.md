@@ -24,3 +24,11 @@ or
 delay 1.0;
 Put_Line("Esperando actividad...");
 ```
+
+Da el siguiente error de compilación:
+
+```bash
+etapa_5_term_temp_guarda_select_accept.adb:12:10: error: at most one of "terminate" or "delay" alternative
+```
+
+Significa que hay que hay escoger entre `terminate` o `delay`.
