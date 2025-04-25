@@ -1,11 +1,11 @@
-package body Cuenta is
+package body Cuenta1 is
    function Crear
      (Titular : Unbounded_String; Saldo : Float) return Cuenta_bancaria
    is
       C : Cuenta_bancaria;
    begin
       C.Titular := Titular;
-      C.Saldo   := Saldo;
+      C.Saldo := Saldo;
       return C;
    end Crear;
 
@@ -31,9 +31,8 @@ package body Cuenta is
    end Consultar_Saldo;
 
    function Consultar_Titular
-     (Cuenta : Cuenta_bancaria) return Unbounded_String
-   is
+     (Cuenta : Cuenta_bancaria) return Unbounded_String is
    begin
       return Cuenta.Titular;
    end Consultar_Titular;
-end Cuenta;
+end Cuenta1;

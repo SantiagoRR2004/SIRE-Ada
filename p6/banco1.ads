@@ -1,12 +1,13 @@
-with Cuenta;
+with Cuenta1;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-package Banco is
+
+package Banco1 is
    type Banco_Array is private;
 
    function Crear_Banco return Banco_Array;
 
    procedure Agregar_Cuenta
-     (B : in out Banco_Array; C : in Cuenta.Cuenta_bancaria);
+     (B : in out Banco_Array; C : in Cuenta1.Cuenta_bancaria);
 
    procedure Transferir
      (B : in out Banco_Array; T1, T2 : in Unbounded_String; Monto : in Float);
@@ -23,6 +24,6 @@ package Banco is
      (B : in out Banco_Array; Titular : in Unbounded_String; Monto : in Float);
 
 private
-   type Banco_Array is array (1 .. 10) of Cuenta.Cuenta_bancaria;
+   type Banco_Array is array (1 .. 10) of Cuenta1.Cuenta_bancaria;
 
-end Banco;
+end Banco1;

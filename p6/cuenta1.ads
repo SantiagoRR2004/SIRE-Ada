@@ -1,5 +1,6 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
-package Cuenta is
+
+package Cuenta1 is
    type Cuenta_bancaria is private;
    function Crear
      (Titular : Unbounded_String; Saldo : Float) return Cuenta_bancaria;
@@ -13,4 +14,4 @@ private
       Titular : Unbounded_String;
       Saldo   : Float;
    end record;
-end Cuenta;
+end Cuenta1;
