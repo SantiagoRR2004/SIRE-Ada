@@ -6,13 +6,13 @@ procedure Etapa_4_Temp_Guarda_Select_Accept is
       entry Extraer (D : out Integer);
    end Buffer;
    task body Buffer is
-      Dato : Integer := 0; -- Buffer inicialmente vac´ıo
+      Dato : Integer := 0; -- Buffer inicialmente vacío
    begin
       loop
          select
             when Dato = 0
             =>
-            -- Solo se puede insertar cuando el buffer est´a vac´ıo (Dato = 0)
+            -- Solo se puede insertar cuando el buffer está vacío (Dato = 0)
             accept Insertar (D : in Integer) do
                Dato := D;
                Put_Line ("Insertado " & Integer'Image (D));
@@ -20,11 +20,11 @@ procedure Etapa_4_Temp_Guarda_Select_Accept is
          or
             when Dato /= 0
             =>
-            -- Solo se puede extraer cuando el buffer no est´a vac´ıo (Dato != 0)
+            -- Solo se puede extraer cuando el buffer no está vacío (Dato != 0)
             accept Extraer (D : out Integer) do
                D := Dato;
                Dato := 0;
-               Put_Line ("Extra´ıdo " & Integer'Image (D));
+               Put_Line ("Extraído " & Integer'Image (D));
             end Extraer;
          or
             -- Si no hay actividad en el buffer, esperar 1 segundo

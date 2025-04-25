@@ -15,7 +15,7 @@ procedure MainTemperatura_entry is
    Put_Line("Sensor: Temperatura actualizada a" & Float'Image(Valor));
    end;
    S.Leer(Temp_Actual);
-   Put_Line("Controlador: Temperatura le´ıda =" & Float'Image(Temp_Actual));
+   Put_Line("Controlador: Temperatura leída =" & Float'Image(Temp_Actual));
    if Temp_Actual > 25.0 then
    Put_Line("¡Alerta! Temperatura alta.");
    end if;

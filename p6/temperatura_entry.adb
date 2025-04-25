@@ -13,7 +13,7 @@ end Actualizar;
 Put_Line("Esperando leer ...");
 accept Leer(Valor : out Float) do
 Valor := Temp;
-Put_Line("le´ıdo...");
+Put_Line("leído...");
 end Leer;
 end loop;
 end Sensor_Tarea;

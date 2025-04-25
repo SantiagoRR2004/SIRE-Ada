@@ -18,7 +18,7 @@ procedure Etapa_2_Select_Accept is
             accept Extraer (D : out Integer) do
                D := Dato;
                Dato := 0;
-               Put_Line ("Extra´ıdo " & Integer'Image (D));
+               Put_Line ("Extraído " & Integer'Image (D));
             end Extraer;
          end select;
       end loop;

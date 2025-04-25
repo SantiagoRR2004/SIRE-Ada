@@ -5,19 +5,19 @@ procedure mainTemperatura is
     S           : Sensor := Crear;
     Temp_Actual : Float;
     -- Guarda la hora de inicio del programa. Clock devuelve la hora actual
-    -- seg´un el reloj del sistema.
+    -- según el reloj del sistema.
     Inicio      : Time   := Ada.Real_Time.Clock;
 begin
     loop
         declare
-            -- Obtener el n´umero de segundos desde el inicio del programa
+            -- Obtener el número de segundos desde el inicio del programa
             Ahora        : Time  := Ada.Real_Time.Clock;
             -- (Ahora - Inicio) da un Time_Span (tiempo pasado desde que
-            -- empez´o el programa)
+            -- empezó el programa)
             -- To_Duration convierte el Time_Span a segundos (Duration), y se
             -- convierte a Float.
             Time_Seconds : Float := Float (To_Duration (Ahora - Inicio));
-            -- Simulaci´on de temperatura
+            -- Simulación de temperatura
             Valor : Float := 20.0 + Float'Remainder (Time_Seconds, 15.0);
         begin
             Actualizar (S, Valor);
@@ -27,7 +27,7 @@ begin
         -- Leer la temperatura del sensor y controlar
         Temp_Actual := Leer (S);
         Put_Line
-           ("Controlador: Temperatura le´ıda =" & Float'Image (Temp_Actual));
+           ("Controlador: Temperatura leída =" & Float'Image (Temp_Actual));
         if Temp_Actual > 25.0 then
             Put_Line ("¡Alerta! Temperatura alta.");
         end if;
