@@ -60,7 +60,7 @@ procedure Buffer_Protegido_array is
    C : Consumidor; -- Instancia de la tarea Consumidor
 
 begin
-   Put_Line ("=== Ejercicio 2: Buffer protegido ===");
+   Put_Line ("=== Ejercicio 4: Buffer protegido array ===");
    delay
      4.0; -- Para permitir que las tareas Productor y Consumidor trabajen un poco
 end Buffer_Protegido_array;
