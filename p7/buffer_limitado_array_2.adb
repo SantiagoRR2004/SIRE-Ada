@@ -14,9 +14,6 @@ procedure Buffer_Limitado_Array is
    begin
       loop
          select
-            when Contador < 5
-            =>
-            -- Solo se puede insertar cuando el buffer está vacío (Dato = 0)
             accept Insertar (D : in Integer) do
                Dato (Fin) := D;
                Fin :=
@@ -27,9 +24,6 @@ procedure Buffer_Limitado_Array is
                Put_Line ("Insertado " & Integer'Image (D));
             end Insertar;
          or
-            when Contador > 0
-            =>
-            -- Solo se puede extraer cuando el buffer no está vacío (Dato != 0)
             accept Extraer (D : out Integer) do
                D := Dato (Inicio);
                Inicio :=
@@ -39,9 +33,6 @@ procedure Buffer_Limitado_Array is
                Contador := Contador - 1; -- Decrementamos el contador
                Put_Line ("Extraído " & Integer'Image (D));
             end Extraer;
-         or
-            -- Terminamos cuando ambas tareas han completado su trabajo
-            terminate; -- Aquí se termina de inmediato
          end select;
       end loop;
    end Buffer;
@@ -66,7 +57,7 @@ procedure Buffer_Limitado_Array is
    P : Productor; -- Instancia de la tarea Productor
    C : Consumidor; -- Instancia de la tarea Consumidor
 begin
-   Put_Line ("=== Ejercicio 3.5: Buffer con array ===");
+   Put_Line ("=== Ejercicio 3.2: Buffer con array ===");
    delay
      6.0; -- Para permitir que las tareas Productor y Consumidor trabajen un poco
 end Buffer_Limitado_Array;

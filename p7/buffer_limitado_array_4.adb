@@ -40,8 +40,9 @@ procedure Buffer_Limitado_Array is
                Put_Line ("Extraído " & Integer'Image (D));
             end Extraer;
          or
-            -- Terminamos cuando ambas tareas han completado su trabajo
-            terminate; -- Aquí se termina de inmediato
+            -- Si no hay actividad en el buffer, esperar 1 segundo
+            delay 1.0;
+            Put_Line ("Esperando actividad...");
          end select;
       end loop;
    end Buffer;
@@ -66,7 +67,7 @@ procedure Buffer_Limitado_Array is
    P : Productor; -- Instancia de la tarea Productor
    C : Consumidor; -- Instancia de la tarea Consumidor
 begin
-   Put_Line ("=== Ejercicio 3.5: Buffer con array ===");
+   Put_Line ("=== Ejercicio 3.4: Buffer con array ===");
    delay
      6.0; -- Para permitir que las tareas Productor y Consumidor trabajen un poco
 end Buffer_Limitado_Array;
