@@ -23,7 +23,7 @@ procedure Buffer_Limitado_Array is
          select
             when Contador < 5
             =>
-            -- Solo se puede insertar cuando el buffer está vacío (Dato = 0)
+            -- Solo se puede insertar cuando el buffer no está lleno
             accept Insertar (D : in Integer) do
                Dato (Fin) := D;
                Fin :=
@@ -36,7 +36,7 @@ procedure Buffer_Limitado_Array is
          or
             when Contador > 0
             =>
-            -- Solo se puede extraer cuando el buffer no está vacío (Dato != 0)
+            -- Solo se puede extraer cuando el buffer no está vacío
             accept Extraer (D : out Integer) do
                D := Dato (Inicio);
                Inicio :=
