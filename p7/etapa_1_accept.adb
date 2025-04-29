@@ -7,22 +7,22 @@ procedure Etapa_1_Accept is
    task type Buffer is
      new IBuffer
    with
-      entry Insertar (I : Integer);
-      entry Extraer (I : out Integer);
+      entry Insertar (D : Integer);
+      entry Extraer (D : out Integer);
    end Buffer;
 
    task body Buffer is
       Dato : Integer := 0;
    begin
       loop
-         accept Insertar (I : in Integer) do
-            Dato := I;
-            Put_Line ("Insertado " & Integer'Image (I));
+         accept Insertar (D : in Integer) do
+            Dato := D;
+            Put_Line ("Insertado " & Integer'Image (D));
          end Insertar;
-         accept Extraer (I : out Integer) do
-            I := Dato;
+         accept Extraer (D : out Integer) do
+            D := Dato;
             Dato := 0;
-            Put_Line ("Extraído " & Integer'Image (I));
+            Put_Line ("Extraído " & Integer'Image (D));
          end Extraer;
       end loop;
    end Buffer;
