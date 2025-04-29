@@ -2,9 +2,10 @@ with Ada.Text_IO;      use Ada.Text_IO;
 with Buffer_Interface; use Buffer_Interface;
 
 package body Main is
-   procedure runBuffer (B : access IBuffer) is
 
-      task type Productor (B : access IBuffer);
+   procedure runBuffer (B : access IBuffer'Class) is
+
+      task type Productor (B : access IBuffer'Class);
 
       task body Productor is
       begin
@@ -14,7 +15,7 @@ package body Main is
          end loop;
       end Productor;
 
-      task type Consumidor (B : access IBuffer);
+      task type Consumidor (B : access IBuffer'Class);
 
       task body Consumidor is
          V : Integer;

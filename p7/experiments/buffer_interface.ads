@@ -1,8 +1,7 @@
 package Buffer_Interface is
 
-   task type IBuffer is
-      entry Insertar (I : in Integer);
-      entry Extraer (I : out Integer);
-   end IBuffer;
+   type IBuffer is task interface;
+   procedure Insertar (B : in out IBuffer; I : in Integer) is abstract;
+   procedure Extraer (B : in out IBuffer; I : out Integer) is abstract;
 
 end Buffer_Interface;
