@@ -1,4 +1,4 @@
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
 procedure Robot_Fase_2 is
@@ -18,85 +18,87 @@ procedure Robot_Fase_2 is
    type Acciones_Array is array (1 .. Max_Acciones) of Accion_Tupla;
 
    protected type Acciones_Protegidas is
-      procedure Guardar(Acciones : in Acciones_Array);
-      procedure Obtener(Acciones : out Acciones_Array);
+      procedure Guardar (Acciones : in Acciones_Array);
+      procedure Obtener (Acciones : out Acciones_Array);
       procedure Resetear;
    private
-      Internas : Acciones_Array := (others => (To_Unbounded_String("Esperar"), 0));
+      Internas : Acciones_Array :=
+        (others => (To_Unbounded_String ("Esperar"), 0));
    end Acciones_Protegidas;
 
    protected body Acciones_Protegidas is
-      procedure Guardar(Acciones : in Acciones_Array) is
+      procedure Guardar (Acciones : in Acciones_Array) is
       begin
          Internas := Acciones;
       end Guardar;
 
-      procedure Obtener(Acciones : out Acciones_Array) is
-           Temp : Acciones_Array := Internas;
-           Tmp  : Accion_Tupla;
-        begin
-           -- Ordenar por prioridad descendente (burbuja)
-           for I in Temp'First .. Temp'Last - 1 loop
-              for J in I + 1 .. Temp'Last loop
-                 if Temp(J).Prioridad > Temp(I).Prioridad then
-                    Tmp := Temp(I);
-                    Temp(I) := Temp(J);
-                    Temp(J) := Tmp;
-                 end if;
-              end loop;
-           end loop;
-        
-           Acciones := Temp;
-        end Obtener;
+      procedure Obtener (Acciones : out Acciones_Array) is
+         Temp : Acciones_Array := Internas;
+         Tmp  : Accion_Tupla;
+      begin
+         -- Ordenar por prioridad descendente (burbuja)
+         for I in Temp'First .. Temp'Last - 1 loop
+            for J in I + 1 .. Temp'Last loop
+               if Temp (J).Prioridad > Temp (I).Prioridad then
+                  Tmp := Temp (I);
+                  Temp (I) := Temp (J);
+                  Temp (J) := Tmp;
+               end if;
+            end loop;
+         end loop;
+
+         Acciones := Temp;
+      end Obtener;
 
       procedure Resetear is
       begin
          for I in Internas'Range loop
-            Internas(I) := (To_Unbounded_String("Esperar"), 0);
+            Internas (I) := (To_Unbounded_String ("Esperar"), 0);
          end loop;
       end Resetear;
    end Acciones_Protegidas;
 
-   task type Planificador(Acc : access Acciones_Protegidas) is
-      entry Planear(Estado : in Estado_Tipo);
+   task type Planificador (Acc : access Acciones_Protegidas) is
+      entry Planear (Estado : in Estado_Tipo);
    end Planificador;
 
    task body Planificador is
       Estado_Actual : Estado_Tipo;
-      Acciones : Acciones_Array := (others => (To_Unbounded_String("Esperar"), 0));
+      Acciones      : Acciones_Array :=
+        (others => (To_Unbounded_String ("Esperar"), 0));
    begin
       loop
-         accept Planear(Estado : in Estado_Tipo) do
+         accept Planear (Estado : in Estado_Tipo) do
             Estado_Actual := Estado;
-            Put_Line("Planeando...");
+            Put_Line ("Planeando...");
 
             -- Vaciar Acciones
             for I in Acciones'Range loop
-               Acciones(I) := (To_Unbounded_String("Esperar"), 0);
+               Acciones (I) := (To_Unbounded_String ("Esperar"), 0);
             end loop;
 
             -- Prioridades: Cargar (3), Girar (2), Avanzar (1)
             if Estado_Actual.Bateria_Baja then
-               Acciones(1) := (To_Unbounded_String("Cargar"), 3);
+               Acciones (1) := (To_Unbounded_String ("Cargar"), 3);
             end if;
             if Estado_Actual.Hay_Obstaculo then
-               Acciones(2) := (To_Unbounded_String("Girar"), 2);
+               Acciones (2) := (To_Unbounded_String ("Girar"), 2);
             end if;
             if Estado_Actual.Camino_Libre then
-               Acciones(3) := (To_Unbounded_String("Avanzar"), 1);
+               Acciones (3) := (To_Unbounded_String ("Avanzar"), 1);
             end if;
 
-            Acc.all.Guardar(Acciones);
+            Acc.all.Guardar (Acciones);
          end Planear;
       end loop;
    end Planificador;
 
    Acc : aliased Acciones_Protegidas;
-   P   : Planificador(Acc'Access);
+   P   : Planificador (Acc'Access);
 
    -- Tareas concurrentes con prioridades fijas
    task Avanzar is
-      pragma Priority(10);
+      pragma Priority (10);
       entry Ejecutar;
    end Avanzar;
 
@@ -105,14 +107,14 @@ procedure Robot_Fase_2 is
       loop
          accept Ejecutar do
             delay 1.0;
-            Put_Line("Ejecutando: Avanzar");
+            Put_Line ("Ejecutando: Avanzar");
             delay 1.0;
          end Ejecutar;
       end loop;
    end Avanzar;
 
    task Girar is
-      pragma Priority(20);
+      pragma Priority (20);
       entry Ejecutar;
    end Girar;
 
@@ -121,14 +123,14 @@ procedure Robot_Fase_2 is
       loop
          accept Ejecutar do
             delay 1.0;
-            Put_Line("Ejecutando: Girar");
+            Put_Line ("Ejecutando: Girar");
             delay 1.0;
          end Ejecutar;
       end loop;
    end Girar;
 
    task Cargar is
-      pragma Priority(30);
+      pragma Priority (30);
       entry Ejecutar;
    end Cargar;
 
@@ -137,7 +139,7 @@ procedure Robot_Fase_2 is
       loop
          accept Ejecutar do
             delay 1.0;
-            Put_Line("Ejecutando: Cargar");
+            Put_Line ("Ejecutando: Cargar");
             delay 1.0;
          end Ejecutar;
       end loop;
@@ -145,7 +147,7 @@ procedure Robot_Fase_2 is
 
    task Robot;
    task body Robot is
-      Estado : Estado_Tipo;
+      Estado   : Estado_Tipo;
       Acciones : Acciones_Array;
    begin
       for I in 1 .. 5 loop
@@ -154,29 +156,36 @@ procedure Robot_Fase_2 is
             V : Integer := I mod 4;
          begin
             case V is
-               when 0 => Estado := (True, False, False);     -- Obstáculo
-               when 1 => Estado := (False, True, False);     -- Camino libre
-               when 2 => Estado := (False, False, True);     -- Batería baja
-               when others => Estado := (True, True, True);  -- Todo a la vez
+               when 0 =>
+                  Estado := (True, False, False);     -- Obstáculo
+
+               when 1 =>
+                  Estado := (False, True, False);     -- Camino libre
+
+               when 2 =>
+                  Estado := (False, False, True);     -- Batería baja
+
+               when others =>
+                  Estado := (True, True, True);  -- Todo a la vez
             end case;
          end;
 
-         Put_Line("Detectando estado...");
-         Put_Line("  Obstáculo: " & Boolean'Image(Estado.Hay_Obstaculo));
-         Put_Line("  Camino libre: " & Boolean'Image(Estado.Camino_Libre));
-         Put_Line("  Batería baja: " & Boolean'Image(Estado.Bateria_Baja));
+         Put_Line ("Detectando estado...");
+         Put_Line ("  Obstáculo: " & Boolean'Image (Estado.Hay_Obstaculo));
+         Put_Line ("  Camino libre: " & Boolean'Image (Estado.Camino_Libre));
+         Put_Line ("  Batería baja: " & Boolean'Image (Estado.Bateria_Baja));
 
-         P.Planear(Estado);
+         P.Planear (Estado);
          delay 0.5;
 
-         Acc.Obtener(Acciones);
+         Acc.Obtener (Acciones);
 
          -- Ejecutar acción más prioritaria
          declare
-            Nombre : constant String := To_String(Acciones(1).Nombre);
+            Nombre : constant String := To_String (Acciones (1).Nombre);
 
          begin
-            Put_Line("  " & Nombre);
+            Put_Line ("  " & Nombre);
             if Nombre = "Avanzar" then
                Avanzar.Ejecutar;
             end if;
@@ -187,7 +196,7 @@ procedure Robot_Fase_2 is
                Cargar.Ejecutar;
             end if;
             if Nombre = "Esperar" then
-               Put_Line("Esperando...");
+               Put_Line ("Esperando...");
             end if;
          end;
 
@@ -199,4 +208,3 @@ procedure Robot_Fase_2 is
 begin
    null;
 end Robot_Fase_2;
-
