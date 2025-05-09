@@ -1,13 +1,8 @@
 with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Common;
 
 procedure Robot_Fase_3 is
-
-   type Estado_Tipo is record
-      Hay_Obstaculo : Boolean := False;
-      Camino_Libre  : Boolean := False;
-      Bateria_Baja  : Boolean := False;
-   end record;
 
    type Accion_Tupla is record
       Nombre    : Unbounded_String;
@@ -59,16 +54,16 @@ procedure Robot_Fase_3 is
    end Acciones_Protegidas;
 
    task type Planificador (Acc : access Acciones_Protegidas) is
-      entry Planear (Estado : in Estado_Tipo);
+      entry Planear (Estado : in Common.Estado_Tipo);
    end Planificador;
 
    task body Planificador is
-      Estado_Actual : Estado_Tipo;
+      Estado_Actual : Common.Estado_Tipo;
       Acciones      : Acciones_Array :=
         (others => (To_Unbounded_String ("Esperar"), 0));
    begin
       loop
-         accept Planear (Estado : in Estado_Tipo) do
+         accept Planear (Estado : in Common.Estado_Tipo) do
             Estado_Actual := Estado;
             Put_Line ("Planeando...");
 
@@ -148,28 +143,12 @@ procedure Robot_Fase_3 is
 
    task Robot;
    task body Robot is
-      Estado   : Estado_Tipo;
+      Estado   : Common.Estado_Tipo;
       Acciones : Acciones_Array;
    begin
       for I in 1 .. 5 loop
          -- Simular sensores
-         declare
-            V : Integer := I mod 4;
-         begin
-            case V is
-               when 0 =>
-                  Estado := (True, False, False);     -- Obstáculo
-
-               when 1 =>
-                  Estado := (False, True, False);     -- Camino libre
-
-               when 2 =>
-                  Estado := (False, False, True);     -- Batería baja
-
-               when others =>
-                  Estado := (True, True, True);  -- Todo a la vez
-            end case;
-         end;
+         Estado := Common.Leer_Sensores;
 
          Put_Line ("Detectando estado...");
          Put_Line ("  Obstáculo: " & Boolean'Image (Estado.Hay_Obstaculo));

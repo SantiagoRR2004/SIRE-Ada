@@ -1,13 +1,8 @@
 with Ada.Text_IO;           use Ada.Text_IO;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+with Common;
 
 procedure Robot_Jerarquico is
-
-   type Estado_Tipo is record
-      Hay_Obstaculo : Boolean := False;
-      Camino_Libre  : Boolean := False;
-      Bateria_Baja  : Boolean := False;
-   end record;
 
    -- Cambiar Meta_Tipo a un array de metas
    type Meta_Tipo is (Evitar_Obstaculo, Cargar_Bateria, Moverse, Ninguna);
@@ -63,7 +58,7 @@ procedure Robot_Jerarquico is
    end Acciones_Protegidas;
 
    task type Planificador_Estrategico is
-      entry Evaluar (Estado : in Estado_Tipo; Metas : out Metas_Array);
+      entry Evaluar (Estado : in Common.Estado_Tipo; Metas : out Metas_Array);
    end Planificador_Estrategico;
 
    task body Planificador_Estrategico is
@@ -71,7 +66,7 @@ procedure Robot_Jerarquico is
       loop
          select
             accept Evaluar
-              (Estado : in Estado_Tipo; Metas : out Metas_Array)
+              (Estado : in Common.Estado_Tipo; Metas : out Metas_Array)
             do
                -- Comenzamos con las metas vacías
                Metas :=
@@ -103,7 +98,7 @@ procedure Robot_Jerarquico is
    end Planificador_Estrategico;
 
    task type Planificador_Tactico (Acc : access Acciones_Protegidas) is
-      entry Planear (Metas : in Metas_Array; Estado : in Estado_Tipo);
+      entry Planear (Metas : in Metas_Array; Estado : in Common.Estado_Tipo);
    end Planificador_Tactico;
 
    task body Planificador_Tactico is
@@ -112,7 +107,9 @@ procedure Robot_Jerarquico is
    begin
       loop
          select
-            accept Planear (Metas : in Metas_Array; Estado : in Estado_Tipo) do
+            accept Planear
+              (Metas : in Metas_Array; Estado : in Common.Estado_Tipo)
+            do
                Acciones := (others => (To_Unbounded_String ("Esperar"), 0));
 
                for I in Metas'Range loop
@@ -209,28 +206,12 @@ procedure Robot_Jerarquico is
 
    task Robot;
    task body Robot is
-      Estado   : Estado_Tipo;
+      Estado   : Common.Estado_Tipo;
       Metas    : Metas_Array;
       Acciones : Acciones_Array;
    begin
       for I in 1 .. 5 loop
-         declare
-            V : Integer := I mod 4;
-         begin
-            case V is
-               when 0 =>
-                  Estado := (True, False, False);
-
-               when 1 =>
-                  Estado := (False, True, False);
-
-               when 2 =>
-                  Estado := (False, False, True);
-
-               when others =>
-                  Estado := (True, True, True);
-            end case;
-         end;
+         Estado := Common.Leer_Sensores;
 
          Put_Line ("Detectando estado...");
          Put_Line ("  Obstáculo: " & Boolean'Image (Estado.Hay_Obstaculo));
