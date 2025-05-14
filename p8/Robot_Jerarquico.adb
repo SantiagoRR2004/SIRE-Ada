@@ -283,6 +283,44 @@ procedure Robot_Jerarquico is
       end loop;
    end Cargar;
 
+   task DispararAlEnemigo is
+      --pragma Priority(40);
+      entry Ejecutar (Valor : in Integer);
+   end DispararAlEnemigo;
+
+   task body DispararAlEnemigo is
+   begin
+      loop
+         select
+            accept Ejecutar (Valor : in Integer) do
+               --  Case statement
+               case Valor is
+                  when 1 =>
+                     Put_Line ("Disparando fusil.");
+
+                  when 2 =>
+                     Put_Line ("Disparando metralleta.");
+
+                  when 3 =>
+                     Put_Line ("Disparando cañón de riel.");
+
+                  when 4 =>
+                     Put_Line ("Disparando ondas gravitacionales.");
+
+                  when 5 =>
+                     Put_Line ("Disparando cañón de antimateria.");
+
+                  when others =>
+                     Put_Line ("Tipo de arma desconocida.");
+               end case;
+               delay 1.0;
+            end Ejecutar;
+         or
+            terminate;
+         end select;
+      end loop;
+   end DispararAlEnemigo;
+
    task Robot;
    task body Robot is
       Estado   : Common.Estado_Tipo;
@@ -338,7 +376,8 @@ procedure Robot_Jerarquico is
                      Put_Line ("No hay balas disponibles");
                   else
                      -- Disparar
-                     Put_Line ("Disparando: " & Nombre (10 .. 10));
+                     DispararAlEnemigo.Ejecutar
+                       (Integer'Value (Nombre (9 .. Nombre'Last)));
                      Balas := Balas - 1;
                      Put_Line ("Balas restantes: " & Integer'Image (Balas));
                   end if;
