@@ -5,6 +5,7 @@ package Common is
       Camino_Libre  : Boolean := False;
       Bateria_Baja  : Boolean := False;
       Enemigo       : Boolean := False;
+      TipoEnemigo   : Integer := 0;
    end record;
 
    function Leer_Sensores return Estado_Tipo;

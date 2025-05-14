@@ -16,7 +16,10 @@ package body Common is
         (Hay_Obstaculo => Random_Bool,
          Camino_Libre  => Random_Bool,
          Bateria_Baja  => Random_Bool,
-         Enemigo       => Random_Bool);
+         Enemigo       => Random_Bool,
+         TipoEnemigo   =>
+           Integer (Float'Floor (Ada.Numerics.Float_Random.Random (G) * 5.0))
+           + 1);
    end Leer_Sensores;
 
 end Common;
