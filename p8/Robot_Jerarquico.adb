@@ -4,9 +4,17 @@ with Common;
 
 procedure Robot_Jerarquico is
 
+   -- Nuevo Tipo misión para más alto nivel
+   type Mision_tipo is (Explorar, Defender, Recargar, Ninguna);
+
    -- Cambiar Meta_Tipo a un array de metas
    type Meta_Tipo is
-     (Evitar_Obstaculo, Cargar_Bateria, Moverse, Disparar, Ninguna);
+     (Evitar_Obstaculo,
+      Cargar_Bateria,
+      Moverse,
+      Disparar,
+      Recargar_Balas,
+      Ninguna);
 
    -- Usar un array de metas
    type Metas_Array is array (1 .. 4) of Meta_Tipo;
@@ -16,7 +24,7 @@ procedure Robot_Jerarquico is
       Prioridad : Integer;
    end record;
 
-   Max_Acciones : constant Integer := 4;
+   Max_Acciones : constant Integer := 5;
    type Acciones_Array is array (1 .. Max_Acciones) of Accion_Tupla;
 
    protected type Acciones_Protegidas is
@@ -58,8 +66,44 @@ procedure Robot_Jerarquico is
       end Resetear;
    end Acciones_Protegidas;
 
+   -- Planificador estratégico mision
+   task type Planificador_Estrategico_Alto_Nivel is
+      entry Obtener_Mision
+        (Estado : in Common.Estado_Tipo; Mision : out Mision_tipo);
+   end Planificador_Estrategico_Alto_Nivel;
+
+   task body Planificador_Estrategico_Alto_Nivel is
+   begin
+      loop
+         select
+            accept Obtener_Mision
+              (Estado : in Common.Estado_Tipo; Mision : out Mision_tipo)
+            do
+               -- Inicializamos la misión en "Ninguna"
+               Mision := Ninguna;
+
+               -- Asignamos la misión según el estado del robot
+               if Estado.Enemigo then
+                  Mision := Defender;
+               elsif Estado.Bateria_Baja then
+                  Mision := Recargar;
+               else
+                  Mision := Explorar;
+               end if;
+
+            end Obtener_Mision;
+         or
+            terminate;
+         end select;
+      end loop;
+   end Planificador_Estrategico_Alto_Nivel;
+
    task type Planificador_Estrategico is
-      entry Evaluar (Estado : in Common.Estado_Tipo; Metas : out Metas_Array);
+      entry Evaluar
+        (Mision : in Mision_Tipo;
+         Estado : in Common.Estado_Tipo;
+         Balas  : in Integer;
+         Metas  : out Metas_Array);
    end Planificador_Estrategico;
 
    task body Planificador_Estrategico is
@@ -67,7 +111,10 @@ procedure Robot_Jerarquico is
       loop
          select
             accept Evaluar
-              (Estado : in Common.Estado_Tipo; Metas : out Metas_Array)
+              (Mision : in Mision_Tipo;
+               Estado : in Common.Estado_Tipo;
+               Balas  : in Integer;
+               Metas  : out Metas_Array)
             do
                -- Comenzamos con las metas vacías
                Metas :=
@@ -76,26 +123,36 @@ procedure Robot_Jerarquico is
                   Ninguna,
                   Ninguna);  -- Inicializamos las metas en "Ninguna"
 
-               -- Prioridad más alta: cargar si la batería está baja
-               if Estado.Bateria_Baja then
-                  Metas (1) := Cargar_Bateria;
-               end if;
+               case Mision is
+                  when Explorar =>
+                     if Estado.Camino_Libre then
+                        Metas (1) := Moverse;
+                     end if;
 
-               -- Si hay un obstáculo, debemos evitarlo
+                  when Defender =>
+                     if Estado.Enemigo then
+                        Metas (1) := Disparar;
+                     end if;
+                     if Balas = 0 then
+                        Metas (2) := Recargar_Balas;
+                     end if;
+
+                  when Recargar =>
+                     if Estado.Bateria_Baja then
+                        Metas (1) := Cargar_Bateria;
+                     end if;
+                     --- Después de cargar, podemos explorar
+                     if Estado.Camino_Libre then
+                        Metas (2) := Moverse;
+                     end if;
+
+                  when others =>
+                     null;
+               end case;
+
+               -- Metas reactivas que pueden superponerse a la misión
                if Estado.Hay_Obstaculo then
-                  Metas (2) :=
-                    Evitar_Obstaculo;  -- Si ya hay una meta, asignamos "Evitar Objeto" a la siguiente posición
-
-               end if;
-
-               -- Si el camino está libre, nos podemos mover
-               if Estado.Camino_Libre then
-                  Metas (3) := Moverse;
-               end if;
-
-               -- Si hay un enemigo, disparamos
-               if Estado.Enemigo then
-                  Metas (4) := Disparar;
+                  Metas (4) := Evitar_Obstaculo;
                end if;
 
             end Evaluar;
@@ -147,6 +204,10 @@ procedure Robot_Jerarquico is
                               10);
                         end if;
 
+                     when Recargar_Balas =>
+                        Acciones (5) :=
+                          (To_Unbounded_String ("Recargar_Balas"), 11);
+
                      when others =>
                         null;
                   end case;
@@ -160,9 +221,10 @@ procedure Robot_Jerarquico is
       end loop;
    end Planificador_Tactico;
 
-   Acc : aliased Acciones_Protegidas;
-   PE  : Planificador_Estrategico;
-   PT  : Planificador_Tactico (Acc'Access);
+   Acc  : aliased Acciones_Protegidas;
+   PEAN : Planificador_Estrategico_Alto_Nivel;
+   PE   : Planificador_Estrategico;
+   PT   : Planificador_Tactico (Acc'Access);
 
    task Avanzar is
       --pragma Priority(10);
@@ -226,7 +288,10 @@ procedure Robot_Jerarquico is
       Estado   : Common.Estado_Tipo;
       Metas    : Metas_Array;
       Acciones : Acciones_Array;
+      Mision   : Mision_tipo;
+      Balas    : Integer;
    begin
+      Balas := 1;
       for I in 1 .. 5 loop
          Estado := Common.Leer_Sensores;
 
@@ -236,7 +301,11 @@ procedure Robot_Jerarquico is
          Put_Line ("  Batería baja: " & Boolean'Image (Estado.Bateria_Baja));
          Put_Line ("  Enemigo: " & Boolean'Image (Estado.Enemigo));
 
-         PE.Evaluar (Estado, Metas);
+         -- Obtener misión
+         PEAN.Obtener_Mision (Estado, Mision);
+         Put_Line ("Misión asignada: " & Mision'Image);
+
+         PE.Evaluar (Mision, Estado, Balas, Metas);
          -- Visualizar metas antes de planear
          Put_Line ("Metas determinadas:");
          for I in Metas'Range loop
@@ -265,7 +334,18 @@ procedure Robot_Jerarquico is
                   Cargar.Ejecutar;
                elsif Nombre'Length >= 8 and then Nombre (1 .. 8) = "Disparar"
                then
-                  Put_Line ("Ejecutando: Disparar " & Nombre (10 .. 10));
+                  if Balas < 0 then
+                     Put_Line ("No hay balas disponibles");
+                  else
+                     -- Disparar
+                     Put_Line ("Disparando: " & Nombre (10 .. 10));
+                     Balas := Balas - 1;
+                     Put_Line ("Balas restantes: " & Integer'Image (Balas));
+                  end if;
+               elsif Nombre = "Recargar_Balas" then
+                  -- Recargar balas
+                  Balas := 1;
+                  Put_Line ("Balas recargadas: " & Integer'Image (Balas));
                end if;
             end;
          end loop;
