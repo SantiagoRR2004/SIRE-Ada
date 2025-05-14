@@ -5,10 +5,11 @@ with Common;
 procedure Robot_Jerarquico is
 
    -- Cambiar Meta_Tipo a un array de metas
-   type Meta_Tipo is (Evitar_Obstaculo, Cargar_Bateria, Moverse, Ninguna);
+   type Meta_Tipo is
+     (Evitar_Obstaculo, Cargar_Bateria, Moverse, Disparar, Ninguna);
 
    -- Usar un array de metas
-   type Metas_Array is array (1 .. 3) of Meta_Tipo;
+   type Metas_Array is array (1 .. 4) of Meta_Tipo;
 
    type Accion_Tupla is record
       Nombre    : Unbounded_String;
@@ -72,6 +73,7 @@ procedure Robot_Jerarquico is
                Metas :=
                  (Ninguna,
                   Ninguna,
+                  Ninguna,
                   Ninguna);  -- Inicializamos las metas en "Ninguna"
 
                -- Prioridad más alta: cargar si la batería está baja
@@ -90,6 +92,12 @@ procedure Robot_Jerarquico is
                if Estado.Camino_Libre then
                   Metas (3) := Moverse;
                end if;
+
+               -- Si hay un enemigo, disparamos
+               if Estado.Enemigo then
+                  Metas (4) := Disparar;
+               end if;
+
             end Evaluar;
          or
             terminate;
@@ -217,6 +225,7 @@ procedure Robot_Jerarquico is
          Put_Line ("  Obstáculo: " & Boolean'Image (Estado.Hay_Obstaculo));
          Put_Line ("  Camino libre: " & Boolean'Image (Estado.Camino_Libre));
          Put_Line ("  Batería baja: " & Boolean'Image (Estado.Bateria_Baja));
+         Put_Line ("  Enemigo: " & Boolean'Image (Estado.Enemigo));
 
          PE.Evaluar (Estado, Metas);
          -- Visualizar metas antes de planear
