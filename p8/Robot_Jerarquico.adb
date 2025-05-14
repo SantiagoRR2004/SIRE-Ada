@@ -16,7 +16,7 @@ procedure Robot_Jerarquico is
       Prioridad : Integer;
    end record;
 
-   Max_Acciones : constant Integer := 3;
+   Max_Acciones : constant Integer := 4;
    type Acciones_Array is array (1 .. Max_Acciones) of Accion_Tupla;
 
    protected type Acciones_Protegidas is
@@ -138,6 +138,12 @@ procedure Robot_Jerarquico is
                              (To_Unbounded_String ("Avanzar"), 1);
                         end if;
 
+                     when Disparar =>
+                        if Estado.Enemigo then
+                           Acciones (4) :=
+                             (To_Unbounded_String ("Disparar"), 10);
+                        end if;
+
                      when others =>
                         null;
                   end case;
@@ -254,6 +260,8 @@ procedure Robot_Jerarquico is
                   Girar.Ejecutar;
                elsif Nombre = "Cargar" then
                   Cargar.Ejecutar;
+               elsif Nombre = "Disparar" then
+                  Put_Line ("Ejecutando: Disparar");
                end if;
             end;
          end loop;
