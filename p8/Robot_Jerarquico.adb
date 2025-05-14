@@ -141,7 +141,10 @@ procedure Robot_Jerarquico is
                      when Disparar =>
                         if Estado.Enemigo then
                            Acciones (4) :=
-                             (To_Unbounded_String ("Disparar"), 10);
+                             (To_Unbounded_String
+                                ("Disparar"
+                                 & Integer'Image (Estado.TipoEnemigo)),
+                              10);
                         end if;
 
                      when others =>
@@ -260,8 +263,9 @@ procedure Robot_Jerarquico is
                   Girar.Ejecutar;
                elsif Nombre = "Cargar" then
                   Cargar.Ejecutar;
-               elsif Nombre = "Disparar" then
-                  Put_Line ("Ejecutando: Disparar");
+               elsif Nombre'Length >= 8 and then Nombre (1 .. 8) = "Disparar"
+               then
+                  Put_Line ("Ejecutando: Disparar " & Nombre (10 .. 10));
                end if;
             end;
          end loop;
