@@ -24,3 +24,6 @@
 
 # Include .gitignore
 !/.gitignore
+
+# Include the docs folder
+!docs/**
