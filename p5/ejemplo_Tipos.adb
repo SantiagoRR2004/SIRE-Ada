@@ -4,6 +4,6 @@ procedure Ejemplo_Tipos is
    C : Boolean := True; -- Variable de tipo booleano
    D : String := "Ada"; -- Variable de tipo cadena de caracteres
 begin
--- Código que utiliza las variables
+   -- Código que utiliza las variables
    return;
 end Ejemplo_Tipos;

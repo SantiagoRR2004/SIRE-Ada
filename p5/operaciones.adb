@@ -1,5 +1,6 @@
 with Ada.Text_IO;       use Ada.Text_IO;
 with Ada.Float_Text_IO; use Ada.Float_Text_IO;
+
 procedure Operaciones is
    A, B : Float;
    function Leer_Float (Mensaje : String) return Float is

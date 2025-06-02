@@ -1,5 +1,6 @@
-with Ada.Text_IO; use Ada.Text_IO;
+with Ada.Text_IO;         use Ada.Text_IO;
 with Ada.Integer_Text_IO; use Ada.Integer_Text_IO;
+
 procedure Lista_Numeros is
    type Lista is array (1 .. 5) of Integer;
    Numeros : Lista;
@@ -20,8 +21,12 @@ begin
    end loop;
 
    for I in Numeros'Range loop
-      Put_Line ("El número que está en la posición " & Integer'Image (I) & " es: " & Integer'Image (Numeros (I)));
+      Put_Line
+        ("El número que está en la posición "
+         & Integer'Image (I)
+         & " es: "
+         & Integer'Image (Numeros (I)));
    end loop;
 
-   Put_Line("La suma de los elementos es:" & Integer'Image(Suma(Numeros)));
+   Put_Line ("La suma de los elementos es:" & Integer'Image (Suma (Numeros)));
 end Lista_Numeros;
