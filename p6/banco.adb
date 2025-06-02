@@ -7,7 +7,7 @@ package body Banco is
    begin
       for I in B'Range loop
          -- Initialize each element task of the array to null
-         Cuenta.Crear_Task_null(B(I));
+         Cuenta.Crear_Task_null (B (I));
       end loop;
       return B;
    end Crear_Banco;
@@ -16,8 +16,8 @@ package body Banco is
      (B : in out Banco_Array; C : in Cuenta.Cuenta_bancaria) is
    begin
       for I in B'Range loop
-         if Cuenta.Check_null(B(I)) then
-            B(I) := C;
+         if Cuenta.Check_null (B (I)) then
+            B (I) := C;
             return;
          end if;
       end loop;
@@ -32,16 +32,16 @@ package body Banco is
    begin
       for I in B'Range loop
          if not Encontrado1
-           and then not Cuenta.Check_null(B(I))
-           and then Cuenta.Consultar_Titular(B(I)) = T1
+           and then not Cuenta.Check_null (B (I))
+           and then Cuenta.Consultar_Titular (B (I)) = T1
          then
-            C1 := B(I);
+            C1 := B (I);
             Encontrado1 := True;
          elsif not Encontrado2
-           and then not Cuenta.Check_null(B(I))
-           and then Cuenta.Consultar_Titular(B(I)) = T2
+           and then not Cuenta.Check_null (B (I))
+           and then Cuenta.Consultar_Titular (B (I)) = T2
          then
-            C2 := B(I);
+            C2 := B (I);
             Encontrado2 := True;
          end if;
          exit when Encontrado1 and Encontrado2;
@@ -51,9 +51,9 @@ package body Banco is
          raise Constraint_Error with "Cuenta(s) no encontrada(s).";
       end if;
 
-      if Cuenta.Consultar_Saldo(C1) >= Monto then
-         Cuenta.Retirar(C1, Monto);
-         Cuenta.Depositar(C2, Monto);
+      if Cuenta.Consultar_Saldo (C1) >= Monto then
+         Cuenta.Retirar (C1, Monto);
+         Cuenta.Depositar (C2, Monto);
       else
          raise Constraint_Error
            with "Saldo insuficiente para realizar la transferencia.";
@@ -64,21 +64,21 @@ package body Banco is
      (B : in Banco_Array; T : in Unbounded_String) return Float is
    begin
       for I in B'Range loop
-         if not Cuenta.Check_null(B(I))
-           and then Cuenta.Consultar_Titular(B(I)) = T
+         if not Cuenta.Check_null (B (I))
+           and then Cuenta.Consultar_Titular (B (I)) = T
          then
-            return Cuenta.Consultar_Saldo(B(I));
+            return Cuenta.Consultar_Saldo (B (I));
          end if;
       end loop;
       raise Constraint_Error with "Cuenta no encontrada.";
    end Consultar_Cuenta;
 
-   function Consultar_Saldo_Banco(B : in Banco_Array) return Float is
+   function Consultar_Saldo_Banco (B : in Banco_Array) return Float is
       Total : Float := 0.0;
    begin
       for I in B'Range loop
-         if not Cuenta.Check_null(B(I)) then
-            Total := Total + Cuenta.Consultar_Saldo (B(I));
+         if not Cuenta.Check_null (B (I)) then
+            Total := Total + Cuenta.Consultar_Saldo (B (I));
          end if;
       end loop;
       return Total;
@@ -89,10 +89,10 @@ package body Banco is
    is
    begin
       for I in B'Range loop
-         if not Cuenta.Check_null(B(I))
-           and then Cuenta.Consultar_Titular(B(I)) = Titular
+         if not Cuenta.Check_null (B (I))
+           and then Cuenta.Consultar_Titular (B (I)) = Titular
          then
-            Cuenta.Depositar(B(I), Monto);
+            Cuenta.Depositar (B (I), Monto);
             return;
          end if;
       end loop;
@@ -104,10 +104,10 @@ package body Banco is
    is
    begin
       for I in B'Range loop
-         if not Cuenta.Check_null(B(I))
-           and then Cuenta.Consultar_Titular(B(I)) = Titular
+         if not Cuenta.Check_null (B (I))
+           and then Cuenta.Consultar_Titular (B (I)) = Titular
          then
-            Cuenta.Retirar(B(I), Monto);
+            Cuenta.Retirar (B (I), Monto);
             return;
          end if;
       end loop;
@@ -117,8 +117,8 @@ package body Banco is
    procedure Finalizar (B : in out Banco_Array) is
    begin
       for I in B'Range loop
-         if not Cuenta.Check_null(B(I)) then
-            Cuenta.Finalizar(B(I));
+         if not Cuenta.Check_null (B (I)) then
+            Cuenta.Finalizar (B (I));
          end if;
       end loop;
    end Finalizar;

@@ -1,5 +1,6 @@
 with Cuenta;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
+
 package Banco is
    type Banco_Array is private;
 
@@ -22,7 +23,8 @@ package Banco is
    procedure Retirar
      (B : in out Banco_Array; Titular : in Unbounded_String; Monto : in Float);
 
-   procedure Finalizar (B : in out Banco_Array); -- Finaliza todas las cuentas en el banco
+   procedure Finalizar
+     (B : in out Banco_Array); -- Finaliza todas las cuentas en el banco
 
 private
    type Banco_Array is array (1 .. 10) of Cuenta.Cuenta_bancaria;
