@@ -2,7 +2,7 @@
 
 Para hacer esta entrega hemos decidido partir de la [fase 4](../p8/Robot_Jerarquico.adb). Hemos añadido un nivel superior que es el tipo de misión, un nuevo sensor que es si hay un enemigo, una meta de disparar y un contador de balas.
 
-El robot sigue ejecutando 5 ciclos como antes. Empieza con una bala ylo primero que hace es leer los sensores. El estado de los sensores se lo pasa ahora al `Planificador_Estrategico_Alto_Nivel`. El robot solo puede tener un tipo de misión (`Mision_tipo`) a la vez: `Explorar`, `Defender` o `Recargar`.
+El robot sigue ejecutando 5 ciclos como antes. Empieza con una bala y lo primero que hace es leer los sensores. El estado de los sensores se lo pasa ahora al `Planificador_Estrategico_Alto_Nivel`. El robot solo puede tener un tipo de misión (`Mision_tipo`) a la vez: `Explorar`, `Defender` o `Recargar`.
 
 A continuación, se le pasa la misión, el estado de los sensores y el contador de balas al `Planificador_Estrategico`. Si la misión es `Explorar` añade la meta de `Moverse` si hay camino libre. Si la misión es `Defender` se añade la meta de `Disparar` si hay un enemigo y si no hay balas se añade la meta de `Recargar_Balas`. Si la misión es `Recargar` se añade la meta de `Cargar_Bateria` y si hay el camino está libre se añade la meta de `Moverse`. Finalemte siempre se añade la meta de `Evitar_Obstaculo`.
 
